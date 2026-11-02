@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "campus-customs": {
+      "command": "C:/Users/14109/Desktop/emba/409_AI_Foundations/Assignment_5/mcp_server/.venv/Scripts/python.exe",
+      "args": [
+        "C:/Users/14109/Desktop/emba/409_AI_Foundations/Assignment_5/mcp_server/mcp_server.py"
+      ]
+    }
+  }
+}

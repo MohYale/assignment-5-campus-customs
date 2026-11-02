@@ -1,0 +1,126 @@
+{
+  "database": "data/campus_customs_new.db",
+  "shop_date": "2026-08-31",
+  "starting_checking_balance": 3400.0,
+  "ending_checking_balance": 728.0,
+  "tickets": [
+    {
+      "id": 101,
+      "final_status": "resolved",
+      "run_id": "fec22f2ab38b",
+      "short_outcome": "The size S Bulldog tee was out of stock by one. Bulldog Print Co can reprint it in 5 days. Invoice 501 stays open. The owner bought one tee for $8.",
+      "agents": [
+        {
+          "agent": "boss",
+          "contribution": "Read the open tickets, assessed 101, and handed it to inventory and accounting in the same step. Final call: the owner must approve a purchase order before money moves. No customer message was requested from customer service."
+        },
+        {
+          "agent": "inventory",
+          "contribution": "Confirmed 0 on hand and a shortfall of 1 for CC-TEE-WHITE size S. Named Bulldog Print Co, apparel reprint, 5 lead days. Did not contact the vendor."
+        },
+        {
+          "agent": "accounting",
+          "contribution": "Read invoice 501, an open $840 rush reprint, and refused a paid-in-full answer because the shelf was empty. Did not draft a payment. Said the invoice does not prove the reprint was ordered or received."
+        },
+        {
+          "agent": "facilities",
+          "contribution": "Did not take a step."
+        },
+        {
+          "agent": "customer_service",
+          "contribution": "Did not take a step."
+        }
+      ],
+      "human_approvals": [
+        {
+          "kind": "purchase_order",
+          "sku": "CC-TEE-WHITE",
+          "size": "S",
+          "qty": 1,
+          "amount": 8.0,
+          "approved_by": "owner",
+          "balance_after": 3392.0,
+          "note": "Invoice 501 was not paid."
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "final_status": "resolved",
+      "run_id": "66ce9714c8ca",
+      "short_outcome": "Chapel Street rent of $2,400 was drafted, then the owner paid it. Checking fell from $3,392 to $992.",
+      "agents": [
+        {
+          "agent": "boss",
+          "contribution": "Called accounting to draft the rent payment and facilities to confirm the lease. On the final step also assessed ticket 103, which stayed open until its own run."
+        },
+        {
+          "agent": "accounting",
+          "contribution": "Read checking at $3,392. After facilities supplied lease 1, drafted a $2,400 rent_payment. Prepared that same draft a second time. Nothing was posted by the agent."
+        },
+        {
+          "agent": "facilities",
+          "contribution": "Confirmed Chapel Street shop, Elm City Properties, $2,400 due 2026-09-02, two days after the shop date, and sent the rent draft back to accounting."
+        },
+        {
+          "agent": "inventory",
+          "contribution": "Did not take a step."
+        },
+        {
+          "agent": "customer_service",
+          "contribution": "Did not take a step."
+        }
+      ],
+      "human_approvals": [
+        {
+          "kind": "rent_payment",
+          "ref_id": 1,
+          "amount": 2400.0,
+          "approved_by": "owner",
+          "balance_after": 992.0,
+          "note": "Chapel Street shop rent."
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "final_status": "resolved",
+      "run_id": "e22597fd9e39",
+      "short_outcome": "Eight of twenty navy hoodies, size M, were on the shelf. A $264 purchase order for the other 12 was approved. The note to Yale AI Club was drafted and not sent.",
+      "agents": [
+        {
+          "agent": "boss",
+          "contribution": "Called accounting first to review the discount and any draft, and called inventory in the same step to check the shortfall. Final call left both the purchase order and the customer message for the owner."
+        },
+        {
+          "agent": "accounting",
+          "contribution": "Reported list $58, unit cost $22, and a $36 margin. No discount target was on the ticket. Drafted a purchase order for 12 CC-HOOD-NAVY size M, $264, and drafted it again when inventory asked. Did not post it."
+        },
+        {
+          "agent": "inventory",
+          "contribution": "Confirmed 8 on hand and a shortfall of 12. Named Bulldog Print Co, 5 lead days. Handed the purchase order to accounting and the customer note to customer service."
+        },
+        {
+          "agent": "facilities",
+          "contribution": "Did not take a step."
+        },
+        {
+          "agent": "customer_service",
+          "contribution": "Drafted a message to Yale AI Club saying 8 were on hand, 20 were requested, payment was not accepted, and the shop would write when the hoodie was available. The draft was not emailed or called."
+        }
+      ],
+      "human_approvals": [
+        {
+          "kind": "purchase_order",
+          "sku": "CC-HOOD-NAVY",
+          "size": "M",
+          "qty": 12,
+          "amount": 264.0,
+          "approved_by": "owner",
+          "balance_after": 728.0,
+          "note": "The customer message was not approved for sending."
+        }
+      ]
+    }
+  ]
+}

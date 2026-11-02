@@ -1,0 +1,188 @@
+{
+  "tools": [
+    {
+      "prompt": "Assess ticket 101. What is the requester asking Campus Customs to provide, and which tables in data/campus_customs_new.db help answer that request?",
+      "tool_name": "assess_ticket_request",
+      "tool_output": {
+        "ticket_id": 101,
+        "database_file": "data/campus_customs_new.db",
+        "type": "customer_order",
+        "status": "open",
+        "requester": "Tauhid Zaman",
+        "subject": "Bulldog tee",
+        "notes": "Needs a tee in size S.",
+        "asking_us_to_provide": "1 × Classic Bulldog Tee (CC-TEE-WHITE), size S.",
+        "helpful_tables": [
+          {
+            "table": "inventory",
+            "why": "This is the shelf count for the sku and size on the ticket."
+          },
+          {
+            "table": "pricing",
+            "why": "This is the list price and unit cost of that sku."
+          },
+          {
+            "table": "invoices",
+            "why": "The ticket points at a vendor bill that is part of filling the request."
+          },
+          {
+            "table": "vendors",
+            "why": "The bill names the provider who would reprint or restock the item."
+          },
+          {
+            "table": "payments",
+            "why": "This is where a recorded payment for the ticket would show up."
+          }
+        ],
+        "inventory": {
+          "asks_for_product": true,
+          "sku": "CC-TEE-WHITE",
+          "name": "Classic Bulldog Tee",
+          "size": "S",
+          "location": "Aisle B",
+          "qty_requested": 1,
+          "qty_on_hand": 0,
+          "row_found": true,
+          "have_what_they_asked": false,
+          "shortfall": 1
+        },
+        "pricing": {
+          "sku": "CC-TEE-WHITE",
+          "unit_cost": 8.0,
+          "list_price": 28.0
+        },
+        "invoice": {
+          "id": 501,
+          "vendor_id": 1,
+          "amount": 840.0,
+          "due_date": "2026-08-28",
+          "status": "open",
+          "description": "Rush reprint CC-TEE-WHITE S"
+        },
+        "vendor": {
+          "id": 1,
+          "name": "Bulldog Print Co",
+          "specialty": "apparel reprint",
+          "lead_days": 5
+        },
+        "lease": null,
+        "cash_accounts": null,
+        "desk": null,
+        "payments": []
+      }
+    },
+    {
+      "prompt": "Does inventory have what ticket 101 is asking for? Check the sku, size, and quantity in data/campus_customs_new.db.",
+      "tool_name": "check_inventory_for_ticket",
+      "tool_output": {
+        "asks_for_product": true,
+        "sku": "CC-TEE-WHITE",
+        "name": "Classic Bulldog Tee",
+        "size": "S",
+        "location": "Aisle B",
+        "qty_requested": 1,
+        "qty_on_hand": 0,
+        "row_found": true,
+        "have_what_they_asked": false,
+        "shortfall": 1,
+        "ticket_id": 101,
+        "database_file": "data/campus_customs_new.db"
+      }
+    },
+    {
+      "prompt": "For ticket 101, if we have the item in inventory, did we get paid for it in full?",
+      "tool_name": "check_paid_in_full",
+      "tool_output": {
+        "ticket_id": 101,
+        "database_file": "data/campus_customs_new.db",
+        "checked_payment": false,
+        "paid_in_full": false,
+        "accept_payment": false,
+        "reason": "Inventory cannot fill this request, so payment is not accepted.",
+        "inventory": {
+          "asks_for_product": true,
+          "sku": "CC-TEE-WHITE",
+          "name": "Classic Bulldog Tee",
+          "size": "S",
+          "location": "Aisle B",
+          "qty_requested": 1,
+          "qty_on_hand": 0,
+          "row_found": true,
+          "have_what_they_asked": false,
+          "shortfall": 1
+        }
+      }
+    },
+    {
+      "prompt": "Ticket 101 is not in inventory. Do not accept the payment. Tell the customer we will contact them when the item becomes available, and contact the providers about restocking it.",
+      "tool_name": "hold_payment_and_request_restock",
+      "tool_output": {
+        "ticket_id": 101,
+        "database_file": "data/campus_customs_new.db",
+        "applies": true,
+        "accept_payment": false,
+        "payment_recorded": false,
+        "emailed": false,
+        "reason": "No email address is stored for this requester or for the vendors.",
+        "customer_message": "Hello Tauhid Zaman. We do not have Classic Bulldog Tee in size S in inventory. We have not accepted your payment. We will contact you when the item becomes available.",
+        "shortfall": 1,
+        "inventory": {
+          "asks_for_product": true,
+          "sku": "CC-TEE-WHITE",
+          "name": "Classic Bulldog Tee",
+          "size": "S",
+          "location": "Aisle B",
+          "qty_requested": 1,
+          "qty_on_hand": 0,
+          "row_found": true,
+          "have_what_they_asked": false,
+          "shortfall": 1
+        },
+        "providers": [
+          {
+            "vendor_id": 1,
+            "name": "Bulldog Print Co",
+            "specialty": "apparel reprint",
+            "lead_days": 5,
+            "can_restock": true,
+            "why": "Specialty is apparel reprint, which covers this garment.",
+            "open_invoices": [
+              {
+                "id": 501,
+                "vendor_id": 1,
+                "amount": 840.0,
+                "due_date": "2026-08-28",
+                "status": "open",
+                "description": "Rush reprint CC-TEE-WHITE S"
+              }
+            ],
+            "message": "Hello Bulldog Print Co, can you restock 1 × Classic Bulldog Tee (CC-TEE-WHITE) in size S so we can meet ticket 101? Your lead time on file is 5 days. Invoice 501 is already open for $840 (Rush reprint CC-TEE-WHITE S).",
+            "emailed": false
+          },
+          {
+            "vendor_id": 2,
+            "name": "Elm City Gifts",
+            "specialty": "mugs and small goods",
+            "lead_days": 3,
+            "can_restock": false,
+            "why": "Specialty is mugs and small goods, which does not cover this product.",
+            "open_invoices": [],
+            "message": "Hello Elm City Gifts, we checked a restock of 1 × Classic Bulldog Tee (CC-TEE-WHITE) in size S for ticket 101. Specialty is mugs and small goods, which does not cover this product. No restock is requested.",
+            "emailed": false
+          },
+          {
+            "vendor_id": 3,
+            "name": "QuickShip CT",
+            "specialty": "local courier",
+            "lead_days": 1,
+            "can_restock": false,
+            "why": "Specialty is local delivery, not supplying stock.",
+            "open_invoices": [],
+            "message": "Hello QuickShip CT, we checked a restock of 1 × Classic Bulldog Tee (CC-TEE-WHITE) in size S for ticket 101. Specialty is local delivery, not supplying stock. No restock is requested.",
+            "emailed": false
+          }
+        ]
+      }
+    }
+  ]
+}

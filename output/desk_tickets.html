@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Customs desk</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1c1915;
+      --muted: #5c564c;
+      --line: #d9d1c3;
+      --paper: #f7f3ea;
+      --card: #fffdf8;
+      --tab: #efe8da;
+      --tab-on: #fffdf8;
+      --accent: #1f4b6e;
+      --wait: #f3efe4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Georgia, "Iowan Old Style", Palatino, serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.5;
+    }
+    header, main { width: min(880px, calc(100% - 32px)); margin: 0 auto; }
+    header { padding: 28px 0 8px; }
+    h1 { font-size: 1.7rem; font-weight: 700; margin: 0 0 6px; }
+    header p { margin: 0; color: var(--muted); }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .tabs button {
+      font: inherit;
+      font-size: 0.95rem;
+      color: var(--ink);
+      background: var(--tab);
+      border: 1px solid var(--line);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+    .tabs button[aria-selected="true"] {
+      background: var(--tab-on);
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .panel {
+      display: none;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 0 10px 10px 10px;
+      padding: 22px 22px 28px;
+      margin-bottom: 40px;
+    }
+    .panel.active { display: block; }
+    h2 { font-size: 1.25rem; margin: 0 0 4px; }
+    .lede { color: var(--muted); margin: 0 0 18px; }
+    h3 { font-size: 1.05rem; margin: 0 0 8px; }
+    section.block { margin: 0 0 18px; }
+    ol, ul { margin: 6px 0 0; padding-left: 1.2rem; }
+    li + li { margin-top: 6px; }
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.92em;
+    }
+    .expected {
+      border-top: 3px solid var(--accent);
+      padding-top: 8px;
+    }
+    .actual {
+      margin-top: 8px;
+      background: var(--wait);
+      border: 1px dashed var(--line);
+      min-height: 140px;
+      padding: 14px 16px 20px;
+    }
+    .actual p { margin: 0; color: var(--muted); }
+    .actual.filled {
+      background: var(--card);
+      border-style: solid;
+    }
+    .actual.filled p,
+    .actual.filled li { color: var(--ink); }
+    .actual.filled p { margin: 0 0 8px; }
+    table.cash { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    table.cash th, table.cash td {
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      padding: 8px 6px;
+    }
+    table.cash th { width: 11rem; }
+    .later {
+      min-height: 160px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Campus Customs desk</h1>
+    <p>Expected is the plan from problem 6. Actual is the team run after the working database was reset. The two sit on the same tab so they can be compared.</p>
+  </header>
+  <main>
+    <div class="tabs" role="tablist" aria-label="Desk pages">
+      <button role="tab" id="tab-101" aria-controls="panel-101" aria-selected="true" tabindex="0">Ticket 101</button>
+      <button role="tab" id="tab-102" aria-controls="panel-102" aria-selected="false" tabindex="-1">Ticket 102</button>
+      <button role="tab" id="tab-103" aria-controls="panel-103" aria-selected="false" tabindex="-1">Ticket 103</button>
+      <button role="tab" id="tab-cash" aria-controls="panel-cash" aria-selected="false" tabindex="-1">Cash</button>
+      <button role="tab" id="tab-reflection" aria-controls="panel-reflection" aria-selected="false" tabindex="-1">Reflection</button>
+    </div>
+
+    <section class="panel active" id="panel-101" role="tabpanel" aria-labelledby="tab-101">
+      <h2>Ticket 101 — customer order</h2>
+      <p class="lede">Tauhid Zaman wants 1 Classic Bulldog Tee, <code>CC-TEE-WHITE</code>, size S.</p>
+      <div class="expected">
+        <h3>Expected</h3>
+        <section class="block">
+          <h3>Who the boss calls first</h3>
+          <p>Inventory. The request is for one shirt in a specific size, so the first question is whether that size is on the shelf.</p>
+        </section>
+        <section class="block">
+          <h3>Delegations</h3>
+          <ol>
+            <li>Boss calls inventory: check <code>CC-TEE-WHITE</code>, size S, quantity 1.</li>
+            <li>Inventory finds the size is not in stock and names the vendor who can restock it. Inventory tells the boss. That vendor is Bulldog Print Co, apparel reprint, with 5 lead days.</li>
+            <li>Boss calls accounting: is there enough cash to buy the shirt from that vendor?</li>
+            <li>Accounting checks the checking account and tells the boss that there is enough. Checking holds $3,400.</li>
+            <li>Boss calls customer service: draft an email to Tauhid Zaman. The shirt is not in stock. The shop will work to get it, expecting 5 days, and will email him with updates. The draft is not sent.</li>
+          </ol>
+        </section>
+        <section class="block">
+          <h3>MCP tools this run should use</h3>
+          <ul>
+            <li>Boss: <code>list_open_tickets</code>, <code>assess_ticket_request</code></li>
+            <li>Inventory: <code>check_inventory_for_ticket</code> or <code>check_stock</code>, then <code>recommend_vendor</code></li>
+            <li>Accounting: <code>read_cash</code>, and <code>check_margin</code> so the unit cost can be set next to the cash balance</li>
+            <li>Customer service: <code>draft_customer_message</code></li>
+          </ul>
+        </section>
+      </div>
+      <div class="actual filled">
+        <h3>Actual</h3>
+        <section class="block">
+          <h3>Who worked</h3>
+          <p>Boss, inventory, and accounting. The boss called inventory and accounting in the same first step. Facilities and customer service did not take a step. The run is <code>fec22f2ab38b</code>, four steps, and the ticket was marked resolved.</p>
+        </section>
+        <section class="block">
+          <h3>Delegations</h3>
+          <ol>
+            <li>Boss called inventory: confirm the size-S shortage for ticket 101 and name the restock option. Do not contact the vendor or start a purchase.</li>
+            <li>Boss also called accounting: review open invoice 501 ($840, due 2026-08-28). Do not pay it and do not start a purchase order.</li>
+            <li>Inventory found 0 on hand, a shortfall of 1, and Bulldog Print Co (apparel reprint, 5 lead days). Inventory did not hand the work on.</li>
+            <li>Accounting found invoice 501 open for a rush reprint of <code>CC-TEE-WHITE</code> size S, and said that bill does not prove the reprint was ordered or received. Accounting did not draft a payment.</li>
+            <li>Boss made the final call and asked the owner to approve a purchase order before any money moved. No customer message was drafted.</li>
+          </ol>
+        </section>
+        <section class="block">
+          <h3>MCP tools this run used</h3>
+          <ul>
+            <li>Boss: <code>list_open_tickets</code>, <code>assess_ticket_request</code></li>
+            <li>Inventory: <code>check_inventory_for_ticket</code>, <code>recommend_vendor</code></li>
+            <li>Accounting: <code>list_invoices</code>, <code>check_paid_in_full</code></li>
+            <li>Facilities: none</li>
+            <li>Customer service: none</li>
+          </ul>
+        </section>
+        <p>The owner then approved a purchase order for 1 Classic Bulldog Tee, size S, at the $8 unit cost. Invoice 501 was not paid.</p>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-102" role="tabpanel" aria-labelledby="tab-102" hidden>
+      <h2>Ticket 102 — rent notice</h2>
+      <p class="lede">Elm City Properties. Chapel Street shop rent is $2,400, due 2026-09-02. The shop date is 2026-08-31.</p>
+      <div class="expected">
+        <h3>Expected</h3>
+        <section class="block">
+          <h3>Who the boss calls first</h3>
+          <p>Accounting. This is a rent ticket, not a product, so the first question is whether checking can cover the rent and whether a payment can be prepared for approval.</p>
+        </section>
+        <section class="block">
+          <h3>Delegations</h3>
+          <ol>
+            <li>Boss calls accounting with the rent ticket.</li>
+            <li>Accounting reads the checking account, sees $3,400 against $2,400 rent, and prepares the rent payment for approval. Accounting gives that draft to the boss. The payment is not sent.</li>
+            <li>Boss calls facilities, which handles the shop space and the rent.</li>
+          </ol>
+        </section>
+        <section class="block">
+          <h3>MCP tools this run should use</h3>
+          <ul>
+            <li>Boss: <code>list_open_tickets</code>, <code>assess_ticket_request</code></li>
+            <li>Accounting: <code>read_cash</code>, <code>prepare_payment_or_po</code> with kind <code>rent_payment</code> for lease 1</li>
+            <li>Facilities: <code>read_shop_space</code></li>
+          </ul>
+        </section>
+      </div>
+      <div class="actual filled">
+        <h3>Actual</h3>
+        <section class="block">
+          <h3>Who worked</h3>
+          <p>Boss, accounting, and facilities. The boss called accounting first, and called facilities in that same step. Inventory and customer service did not take a step. The run is <code>66ce9714c8ca</code>, eight steps, and the ticket was marked resolved. Checking was already $3,392 because the ticket 101 purchase had been approved.</p>
+        </section>
+        <section class="block">
+          <h3>Delegations</h3>
+          <ol>
+            <li>Boss called accounting: check cash against the rent and prepare a rent-payment draft. Do not pay.</li>
+            <li>Boss called facilities: confirm the Chapel Street lease, the rent amount, and the due date.</li>
+            <li>Accounting read checking ($3,392) and handed the question to facilities because it did not yet have the lease id and amount.</li>
+            <li>Facilities confirmed lease 1, $2,400 due 2026-09-02, two days after the shop date, and handed a rent draft back to accounting.</li>
+            <li>Accounting drafted a $2,400 <code>rent_payment</code> for lease 1. Posted was false. A later facilities handoff asked for the same draft again, and accounting prepared it a second time. Still not posted.</li>
+            <li>On the final step the boss also assessed ticket 103. That did not resolve 103. The rent draft was left for the owner.</li>
+          </ol>
+        </section>
+        <section class="block">
+          <h3>MCP tools this run used</h3>
+          <ul>
+            <li>Boss: <code>list_open_tickets</code>, <code>assess_ticket_request</code> for 102, and <code>assess_ticket_request</code> for 103 on the last step</li>
+            <li>Accounting: <code>read_cash</code>, <code>prepare_payment_or_po</code> with kind <code>rent_payment</code> and ref 1</li>
+            <li>Facilities: <code>assess_ticket_request</code>, <code>read_shop_space</code></li>
+            <li>Inventory: none</li>
+            <li>Customer service: none</li>
+          </ul>
+        </section>
+        <p>The owner approved the rent payment. Checking fell by $2,400, from $3,392.00 to $992.00.</p>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-103" role="tabpanel" aria-labelledby="tab-103" hidden>
+      <h2>Ticket 103 — bulk hoodie order</h2>
+      <p class="lede">Yale AI Club wants 20 Basic Hoodie Big Yale, <code>CC-HOOD-NAVY</code>, size M, and is asking for a bulk discount.</p>
+      <div class="expected">
+        <h3>Expected</h3>
+        <section class="block">
+          <h3>Who the boss calls first</h3>
+          <p>Inventory. The request is a purchase of 20 hoodies in size M, so the first question is how many of that size are on the shelf.</p>
+        </section>
+        <section class="block">
+          <h3>Delegations</h3>
+          <ol>
+            <li>Boss calls inventory: 20 × <code>CC-HOOD-NAVY</code>, size M.</li>
+            <li>Inventory finds 8 on hand, so 12 are still needed, and names the vendor who can restock the remainder. Inventory tells the boss. That vendor is Bulldog Print Co.</li>
+            <li>Boss calls accounting: is there enough money to buy the remaining 12?</li>
+            <li>Accounting tells the boss that there is enough. The unit cost is $22, so 12 cost $264, and checking holds $3,400.</li>
+            <li>Boss calls customer service: draft an email to Yale AI Club explaining the current situation, with updates when the rest of the order becomes available. The draft is not sent.</li>
+          </ol>
+        </section>
+        <section class="block">
+          <h3>MCP tools this run should use</h3>
+          <ul>
+            <li>Boss: <code>list_open_tickets</code>, <code>assess_ticket_request</code></li>
+            <li>Inventory: <code>check_inventory_for_ticket</code> or <code>check_stock</code>, then <code>recommend_vendor</code></li>
+            <li>Accounting: <code>read_cash</code>, <code>check_margin</code></li>
+            <li>Customer service: <code>draft_customer_message</code></li>
+          </ul>
+        </section>
+      </div>
+      <div class="actual filled">
+        <h3>Actual</h3>
+        <section class="block">
+          <h3>Who worked</h3>
+          <p>Boss, accounting, inventory, and customer service. The boss called accounting first, and called inventory in that same step. Facilities did not take a step. The run is <code>e22597fd9e39</code>, seven steps, and the ticket was marked resolved. Checking was $992 because rent had already been approved.</p>
+        </section>
+        <section class="block">
+          <h3>Delegations</h3>
+          <ol>
+            <li>Boss called accounting to review the bulk discount from list price and unit cost, and to prepare a draft if one was warranted. Do not execute it.</li>
+            <li>Boss called inventory to check the 12-unit shortfall of <code>CC-HOOD-NAVY</code> size M and name a vendor. Do not place an order.</li>
+            <li>Accounting found 8 on hand, list $58, unit cost $22, margin $36 (62.1%), and no discount target. It drafted a purchase order for 12 units and did not accept a customer payment.</li>
+            <li>Inventory confirmed 8 on hand, shortfall 12, and Bulldog Print Co with a 5-day lead. Inventory then called accounting to draft that purchase order, and called customer service to explain the shortfall.</li>
+            <li>Accounting drafted the same 12-unit purchase order again: $264, not posted.</li>
+            <li>Customer service drafted a message to Yale AI Club. It was not sent.</li>
+            <li>Boss made the final call: the owner must approve the purchase order before money moves, and must approve the message before it is sent.</li>
+          </ol>
+        </section>
+        <section class="block">
+          <h3>MCP tools this run used</h3>
+          <ul>
+            <li>Boss: <code>list_open_tickets</code>, <code>assess_ticket_request</code></li>
+            <li>Accounting: <code>check_paid_in_full</code>, <code>check_margin</code>, <code>prepare_payment_or_po</code> for 12 × <code>CC-HOOD-NAVY</code> size M</li>
+            <li>Inventory: <code>check_stock</code>, <code>recommend_vendor</code>, <code>check_inventory_for_ticket</code></li>
+            <li>Customer service: <code>draft_customer_message</code></li>
+            <li>Facilities: none</li>
+          </ul>
+        </section>
+        <p>The owner approved the $264 purchase order. The customer message was left unsent. Checking fell from $992.00 to $728.00.</p>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-cash" role="tabpanel" aria-labelledby="tab-cash" hidden>
+      <h2>Cash</h2>
+      <p>Checking in <code>data/campus_customs_new.db</code> after the reset, then the one human approval posted for each resolved ticket. Agents only prepared drafts. <code>POST /api/approve</code> is what changed the balance.</p>
+      <table class="cash">
+        <tbody>
+          <tr>
+            <th>Starting</th>
+            <td>$3,400.00 after <code>POST /api/reset</code>, shop date 2026-08-31.</td>
+          </tr>
+          <tr>
+            <th>Ticket 101</th>
+            <td>Purchase order for 1 Classic Bulldog Tee (<code>CC-TEE-WHITE</code>, size S) at the $8 unit cost. Checking went from $3,400.00 to $3,392.00. Invoice 501 ($840) was not paid.</td>
+          </tr>
+          <tr>
+            <th>Ticket 102</th>
+            <td>Rent payment for the Chapel Street shop, lease 1, $2,400. Checking went from $3,392.00 to $992.00.</td>
+          </tr>
+          <tr>
+            <th>Ticket 103</th>
+            <td>Purchase order for 12 Basic Hoodie Big Yale (<code>CC-HOOD-NAVY</code>, size M) at $22 each, $264. Checking went from $992.00 to $728.00. The customer draft was not sent and did not change cash.</td>
+          </tr>
+          <tr>
+            <th>Ending</th>
+            <td>$728.00. This matches <code>cash_accounts</code> where <code>name</code> is <code>checking</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel" id="panel-reflection" role="tabpanel" aria-labelledby="tab-reflection" hidden>
+      <h2>Reflection</h2>
+      <section class="block">
+        <h3>How the agents did</h3>
+        <p>They did an excellent job. On each ticket they performed the task to my expectations: they read the request, used the shop tables, named the right next step, and left payment and any customer message for me to approve.</p>
+        <ul>
+          <li>Ticket 101. They found that the size-S tee was not on the shelf, named Bulldog Print Co and the 5-day lead, and did not pay the $840 invoice. I approved the $8 restock myself.</li>
+          <li>Ticket 102. They treated it as rent, checked checking against $2,400, prepared the rent draft, and had facilities confirm the Chapel Street lease. I approved the payment.</li>
+          <li>Ticket 103. They found 8 hoodies on hand, a shortfall of 12, Bulldog Print Co, a $264 purchase at $22 each, and a customer draft that was not sent. I approved the purchase.</li>
+        </ul>
+      </section>
+      <section class="block">
+        <h3>Expected plan compared with the executed plan</h3>
+        <p>Ticket 101. I expected inventory first, then accounting to confirm cash for the shirt, then customer service to draft an email that would not be sent. The executed plan called inventory and accounting together. Inventory did the stock and vendor check I expected. Accounting reviewed invoice 501 and refused to treat it as proof the reprint had arrived, which is the careful version of “do not pay yet.” Customer service did not take a step, so the email draft was the one piece of my plan that did not run. The outcome still matched: out of stock, right vendor, no money moved until I approved the $8 purchase order.</p>
+        <p>Ticket 102. I expected accounting first, a draft for the $2,400 rent because checking could cover it, and then facilities. The executed plan called accounting and facilities in the opening step. Accounting prepared the rent draft, and facilities confirmed lease 1, $2,400, due 2026-09-02. They passed the lease id back and forth and prepared the draft twice, and the boss also looked at ticket 103 on the last step. The payment still waited for me, and checking fell from $3,392 to $992 only after I approved it.</p>
+        <p>Ticket 103. I expected inventory first, then accounting on the $264 restock, then a customer-service draft. The executed plan called accounting first and inventory in the same step. Inventory still reported 8 on hand and the shortfall of 12, accounting drafted the $264 purchase order, and customer service drafted the note to Yale AI Club and did not send it. No discount amount was on the ticket, so they reported the $58 list price, the $22 cost, and the $36 margin and left the price alone. I approved the purchase order, and checking went from $992 to $728.</p>
+      </section>
+      <section class="block">
+        <h3>One agent with tools</h3>
+        <p>One agent with these tools would have been simpler. Each ticket is a short lookup: stock or lease, cash, a draft, and stop. The tasks do not have the degree of complexity that calls for a multi-level team. On 102 the lease amount was already on the ticket, and the agents still handed that fact around. On 103 the same purchase order was drafted twice. One agent could have called the tools in one pass.</p>
+      </section>
+      <section class="block">
+        <h3>New problems this team could handle</h3>
+        <ul>
+          <li>Similar tickets for different Campus Customs inventory. A hat, a mug, or another size is the same path: assess the ticket, check the shelf, name the vendor, and draft a purchase if the count is short.</li>
+          <li>Updating the checking account and keeping it clean. The agents prepare the payment, and the human approval posts it, so the balance stays a simple record of what I actually approved.</li>
+          <li>A customer asking for a discount. The team can read the list price and the unit cost, say what the margin is, and draft a reply. I still decide the price.</li>
+        </ul>
+      </section>
+      <section class="block">
+        <h3>What this multi-agent team cannot handle</h3>
+        <ul>
+          <li>Ticket 103 started with 8 hoodies and we ordered 12 more. That purchase does not change inventory. I would add a tool that counts the received units onto the shelf.</li>
+          <li>Customer service can only draft a message. I would add an email address and a phone number so the customer-service agent can improve the experience once I approve the contact.</li>
+          <li>If a discount is offered, nothing writes the new price. I would add a tool that adjusts the price of the item to the discounted price.</li>
+        </ul>
+      </section>
+    </section>
+  </main>
+  <script>
+    const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+    const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+    function selectTab(tab) {
+      tabs.forEach((item) => {
+        const on = item === tab;
+        item.setAttribute("aria-selected", on ? "true" : "false");
+        item.tabIndex = on ? 0 : -1;
+      });
+      panels.forEach((panel) => {
+        const on = panel.id === tab.getAttribute("aria-controls");
+        panel.classList.toggle("active", on);
+        panel.hidden = !on;
+      });
+      tab.focus();
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => selectTab(tab));
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+        event.preventDefault();
+        const next = event.key === "ArrowRight"
+          ? (index + 1) % tabs.length
+          : (index - 1 + tabs.length) % tabs.length;
+        selectTab(tabs[next]);
+      });
+    });
+  </script>
+</body>
+</html>
